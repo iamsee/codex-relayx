@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>codex-relayx 管理</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="app">
+        <header>
+            <h1>🚀 codex-relayx</h1>
+            <p class="subtitle">LLM 协议转换网关</p>
+        </header>
+
+        <nav>
+            <button class="tab-btn active" data-tab="dashboard">概览</button>
+            <button class="tab-btn" data-tab="upstreams">上游</button>
+            <button class="tab-btn" data-tab="models">模型映射</button>
+            <button class="tab-btn" data-tab="logs">日志</button>
+        </nav>
+
+        <main>
+            <!-- Dashboard -->
+            <section id="dashboard" class="tab-content active">
+                <h2>系统状态</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-label">运行时间</div>
+                        <div class="stat-value" id="stat-uptime">-</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">总请求数</div>
+                        <div class="stat-value" id="stat-requests">-</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">错误数</div>
+                        <div class="stat-value" id="stat-errors">-</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">上游数</div>
+                        <div class="stat-value" id="stat-upstreams">-</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Upstreams -->
+            <section id="upstreams" class="tab-content">
+                <div class="section-header">
+                    <h2>上游管理</h2>
+                    <button class="btn btn-primary" onclick="showAddUpstream()">+ 添加上游</button>
+                </div>
+                <div id="upstreams-list"></div>
+            </section>
+
+            <!-- Models -->
+            <section id="models" class="tab-content">
+                <div class="section-header">
+                    <h2>模型映射（全局视图）</h2>
+                    <button class="btn btn-primary" onclick="showAddModel()">+ 添加映射</button>
+                </div>
+                <div id="models-list"></div>
+            </section>
+
+            <!-- Logs -->
+            <section id="logs" class="tab-content">
+                <div class="section-header">
+                    <h2>请求日志</h2>
+                    <button class="btn" onclick="loadLogs()">🔄 刷新</button>
+                </div>
+                <div id="logs-list"></div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Modal: Add / Edit Upstream -->
+    <div id="upstream-modal" class="modal">
+        <div class="modal-content">
+            <h3 id="upstream-modal-title">添加上游</h3>
+            <form id="upstream-form">
+                <label>ID: <input type="text" name="id" required></label>
+                <label>名称: <input type="text" name="name" required></label>
+                <label>Base URL: <input type="text" name="base_url" required placeholder="http://..."></label>
+                <label>API Key: <input type="text" name="api_key"></label>
+                <label>API 格式:
+                    <select name="api_format">
+                        <option value="openai_chat">OpenAI Chat Completions</option>
+                        <option value="anthropic">Anthropic Messages</option>
+                    </select>
+                </label>
+                <label>最大重试: <input type="number" name="max_retries" value="3" min="0" max="10"></label>
+                <label class="checkbox">
+                    <input type="checkbox" name="enabled" checked> 启用
+                </label>
+                <hr>
+                <div>
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+                        <strong>模型映射</strong>
+                        <button type="button" class="btn btn-sm" onclick="addMappingRow()">+ 添加映射</button>
+                    </div>
+                    <div id="mapping-list"></div>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn" onclick="closeModal('upstream-modal')">取消</button>
+                    <button type="submit" class="btn btn-primary">保存</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal: Add Model Mapping (global) -->
+    <div id="model-modal" class="modal">
+        <div class="modal-content">
+            <h3>添加模型映射</h3>
+            <form id="model-form">
+                <label>Codex 模型: <input type="text" name="codex_model" required placeholder="gpt-5.4"></label>
+                <label>上游模型: <input type="text" name="upstream_model" required placeholder="qwen3.7-plus"></label>
+                <label>上游 ID: <input type="text" name="upstream_id" required placeholder="bailian (或 global)"></label>
+                <div class="form-actions">
+                    <button type="button" class="btn" onclick="closeModal('model-modal')">取消</button>
+                    <button type="submit" class="btn btn-primary">保存</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

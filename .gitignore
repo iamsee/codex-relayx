@@ -1,0 +1,28 @@
+# Build artifacts (root only)
+./codex-relayx
+./codex-relayx-linux
+./codex-relayx.exe
+./codex-relayx-windows-amd64.exe
+dist/
+*.exe
+*.test
+*.out
+
+# Local data
+data/
+config.json
+*.log
+
+# IDE
+.idea/
+.vscode/
+*.swp
+.DS_Store
+
+# Go
+vendor/
+
+# Secrets / local overrides
+.env
+.env.*
+*.local

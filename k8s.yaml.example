@@ -1,0 +1,129 @@
+# Sanitized Kubernetes manifest (replace placeholders before applying)
+# Copy to k8s.yaml, fill in the marked fields, then `kubectl apply -f k8s.yaml`.
+
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: codex-relayx
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: codex-relayx-secret
+  namespace: codex-relayx
+type: Opaque
+stringData:
+  # Replace with the upstream provider's API key.
+  # This is OPTIONAL — the API key may also live in the mounted config.json.
+  UPSTREAM_API_KEY: "REPLACE_ME"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: codex-relayx-data
+  namespace: codex-relayx
+spec:
+  accessModes: ["ReadWriteOnce"]
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: codex-relayx
+  namespace: codex-relayx
+  labels:
+    app: codex-relayx
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: codex-relayx
+  template:
+    metadata:
+      labels:
+        app: codex-relayx
+    spec:
+      containers:
+        - name: codex-relayx
+          image: isvbytes/codex-relayx:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8001
+              protocol: TCP
+          env:
+            - name: TZ
+              value: Asia/Shanghai
+            - name: RELAYX_DATA_DIR
+              value: /var/lib/codex-relayx
+          resources:
+            requests:
+              cpu: 10m
+              memory: 16Mi
+            limits:
+              cpu: 200m
+              memory: 128Mi
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/codex-relayx
+          livenessProbe:
+            httpGet:
+              path: /admin/api/stats
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /v1/models
+              port: http
+            initialDelaySeconds: 3
+            periodSeconds: 5
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: codex-relayx-data
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: codex-relayx
+  namespace: codex-relayx
+spec:
+  type: NodePort
+  selector:
+    app: codex-relayx
+  ports:
+    - name: http
+      port: 8001
+      targetPort: http
+      nodePort: 30011   # change if your cluster reserves other ports
+---
+# Optional: terminate TLS at the cluster ingress.
+# Adjust the ingressClassName to match your cluster (e.g. traefik, nginx).
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: codex-relayx
+  namespace: codex-relayx
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+spec:
+  rules:
+    - host: codex-relayx.example.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: codex-relayx
+                port:
+                  number: 8001
