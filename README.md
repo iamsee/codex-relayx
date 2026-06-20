@@ -1,9 +1,11 @@
 # Codex-Relayx
 
-[![Go Version](https://img.shields.io/github/go-mod/go-version/isvbytes/codex-relayx)](go.mod)
+[![Go Version](https://img.shields.io/github/go-mod/go-version/iamsee/codex-relayx)](go.mod)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Release](https://img.shields.io/github/v/release/isvbytes/codex-relayx)](../../releases)
-[![Docker Hub](https://img.shields.io/docker/v/isvbytes/codex-relayx?label=docker)](https://hub.docker.com/r/isvbytes/codex-relayx)
+[![Release](https://img.shields.io/github/v/release/iamsee/codex-relayx)](https://github.com/iamsee/codex-relayx/releases/latest)
+[![GitHub stars](https://img.shields.io/github/stars/iamsee/codex-relayx?style=social)](https://github.com/iamsee/codex-relayx/stargazers)
+
+[English](README.md) | [中文](README.zh-CN.md)
 
 A lightweight, single-binary LLM protocol-conversion gateway written in Go.
 
@@ -92,7 +94,7 @@ The conversion layer is a faithful Go port of the Rust reference
 
 ```bash
 # linux/amd64
-curl -L -o codex-relayx https://github.com/isvbytes/codex-relayx/releases/latest/download/codex-relayx-linux-amd64
+curl -L -o codex-relayx https://github.com/iamsee/codex-relayx/releases/latest/download/codex-relayx-linux-amd64
 chmod +x codex-relayx
 ./codex-relayx --port 8001 --data-dir ./data
 ```
@@ -105,7 +107,7 @@ Then open <http://127.0.0.1:8001/> for the admin UI.
 docker run -d --name codex-relayx \
   -p 8001:8001 \
   -v $(pwd)/data:/var/lib/codex-relayx \
-  isvbytes/codex-relayx:latest
+  iamsee/codex-relayx:latest
 ```
 
 ### Build from source
@@ -113,7 +115,7 @@ docker run -d --name codex-relayx \
 Requires Go 1.22+.
 
 ```bash
-git clone https://github.com/isvbytes/codex-relayx.git
+git clone https://github.com/iamsee/codex-relayx.git
 cd codex-relayx
 go build -o codex-relayx ./cmd/codex-relayx
 ./codex-relayx --port 8001 --data-dir ./data
@@ -281,7 +283,7 @@ GOOS=linux  GOARCH=arm64 go build -o dist/codex-relayx-linux-arm64  ./cmd/codex-
 GOOS=windows GOARCH=amd64 go build -o dist/codex-relayx-windows-amd64.exe ./cmd/codex-relayx
 
 # Docker
-docker build -t isvbytes/codex-relayx:dev .
+docker build -t iamsee/codex-relayx:dev .
 ```
 
 ---
@@ -300,17 +302,9 @@ That triggers:
 1. Cross-compile to `linux/amd64`, `linux/arm64`, `windows/amd64`.
 2. Compute `SHA256SUMS`.
 3. Publish a GitHub Release with the binaries + checksums attached.
-4. Build and push multi-arch Docker images to Docker Hub:
-   `isvbytes/codex-relayx:v0.1.0`, `:0.1`, `:latest`.
 
-### Required GitHub secrets
-
-| Secret | Purpose |
-|---|---|
-| `DOCKERHUB_USERNAME` | Docker Hub login |
-| `DOCKERHUB_TOKEN` | Docker Hub access token (https://hub.docker.com/settings/security) |
-
-No other secrets are required for the default pipeline.
+No GitHub secrets are required for the default pipeline — everything runs on
+public `ubuntu-latest` runners.
 
 ---
 
@@ -325,3 +319,13 @@ No other secrets are required for the default pipeline.
 ## License
 
 [MIT](LICENSE) © isvbytes.com
+
+## Star History
+
+<a href="https://star-history.com/#iamsee/codex-relayx&Date">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=iamsee/codex-relayx&type=Date&theme=dark" />
+    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=iamsee/codex-relayx&type=Date" />
+    <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=iamsee/codex-relayx&type=Date" />
+  </picture>
+</a>

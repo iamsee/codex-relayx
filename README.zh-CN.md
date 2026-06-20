@@ -1,9 +1,11 @@
 # Codex-Relayx（中文）
 
-[![Go Version](https://img.shields.io/github/go-mod/go-version/isvbytes/codex-relayx)](go.mod)
+[![Go Version](https://img.shields.io/github/go-mod/go-version/iamsee/codex-relayx)](go.mod)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Release](https://img.shields.io/github/v/release/isvbytes/codex-relayx)](../../releases)
-[![Docker Hub](https://img.shields.io/docker/v/isvbytes/codex-relayx?label=docker)](https://hub.docker.com/r/isvbytes/codex-relayx)
+[![Release](https://img.shields.io/github/v/release/iamsee/codex-relayx)](https://github.com/iamsee/codex-relayx/releases/latest)
+[![GitHub stars](https://img.shields.io/github/stars/iamsee/codex-relayx?style=social)](https://github.com/iamsee/codex-relayx/stargazers)
+
+[English](README.md) | [中文](README.zh-CN.md)
 
 一个用 Go 写成的、轻量级的、单文件 LLM 协议转换网关。
 
@@ -79,7 +81,7 @@ Codex CLI 原生只支持两种协议：
 
 ```bash
 # linux/amd64
-curl -L -o codex-relayx https://github.com/isvbytes/codex-relayx/releases/latest/download/codex-relayx-linux-amd64
+curl -L -o codex-relayx https://github.com/iamsee/codex-relayx/releases/latest/download/codex-relayx-linux-amd64
 chmod +x codex-relayx
 ./codex-relayx --port 8001 --data-dir ./data
 ```
@@ -92,7 +94,7 @@ chmod +x codex-relayx
 docker run -d --name codex-relayx \
   -p 8001:8001 \
   -v $(pwd)/data:/var/lib/codex-relayx \
-  isvbytes/codex-relayx:latest
+  iamsee/codex-relayx:latest
 ```
 
 ### 从源码编译
@@ -100,7 +102,7 @@ docker run -d --name codex-relayx \
 需要 Go 1.22+。
 
 ```bash
-git clone https://github.com/isvbytes/codex-relayx.git
+git clone https://github.com/iamsee/codex-relayx.git
 cd codex-relayx
 go build -o codex-relayx ./cmd/codex-relayx
 ./codex-relayx --port 8001 --data-dir ./data
@@ -265,7 +267,7 @@ GOOS=linux  GOARCH=arm64 go build -o dist/codex-relayx-linux-arm64     ./cmd/cod
 GOOS=windows GOARCH=amd64 go build -o dist/codex-relayx-windows-amd64.exe ./cmd/codex-relayx
 
 # Docker
-docker build -t isvbytes/codex-relayx:dev .
+docker build -t iamsee/codex-relayx:dev .
 ```
 
 ---
@@ -284,17 +286,8 @@ git push origin v0.1.0
 1. 交叉编译 `linux/amd64`、`linux/arm64`、`windows/amd64`
 2. 计算 `SHA256SUMS`
 3. 创建 GitHub Release，上传二进制 + 校验和
-4. 构建多架构 Docker 镜像并推送到 Docker Hub：
-   `isvbytes/codex-relayx:v0.1.0`、`:0.1`、`:latest`
 
-### 需要的 GitHub Secrets
-
-| Secret | 用途 |
-|---|---|
-| `DOCKERHUB_USERNAME` | Docker Hub 登录用户名 |
-| `DOCKERHUB_TOKEN` | Docker Hub Access Token（https://hub.docker.com/settings/security） |
-
-默认流水线不需要其他 secret。
+默认流水线**不需要任何 GitHub Secrets**——全跑在公网的 `ubuntu-latest` runner 上。
 
 ---
 
@@ -308,3 +301,13 @@ git push origin v0.1.0
 ## 许可证
 
 [MIT](LICENSE) © isvbytes.com
+
+## Star History
+
+<a href="https://star-history.com/#iamsee/codex-relayx&Date">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=iamsee/codex-relayx&type=Date&theme=dark" />
+    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=iamsee/codex-relayx&type=Date" />
+    <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=iamsee/codex-relayx&type=Date" />
+  </picture>
+</a>
